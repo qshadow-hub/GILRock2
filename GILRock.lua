@@ -25,9 +25,9 @@ local Window = Rayfield:CreateWindow({
       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
    },
 
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = true, -- Set this to true to use our key system
    KeySettings = {
-      Title = "Untitled",
+      Title = "GILRock Key",
       Subtitle = "Key System",
       Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
