@@ -1,120 +1,39 @@
-----------------------------------------------------------------
--- CHARACTER TAB
-----------------------------------------------------------------
-local CharacterTab = Window:CreateTab("Character", nil)
-CharacterTab:CreateSection("Character")
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Tabel cu numele butoanelor și callback-urile lor
-local characterButtons = {
-    {
-        Name = "Noclip",
-        Callback = function()
-            -- Codul Noclip pe care l-ai pus deja
-            local Workspace = game:GetService("Workspace")
-            local Players = game:GetService("Players")
-            local Plr = Players.LocalPlayer
-            local Clipon = false
-            -- Creează GUI-ul Noclip
-            local Noclip = Instance.new("ScreenGui")
-            local BG = Instance.new("Frame")
-            local Title = Instance.new("TextLabel")
-            local Toggle = Instance.new("TextButton")
-            local StatusPF = Instance.new("TextLabel")
-            local Status = Instance.new("TextLabel")
+local Window = Rayfield:CreateWindow({
+   Name = "Rayfield Example Window",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Rayfield Interface Suite",
+   LoadingSubtitle = "by Sirius",
+   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
-            Noclip.Name = "Noclip"
-            Noclip.Parent = game.CoreGui
+   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
 
-            BG.Name = "BG"
-            BG.Parent = Noclip
-            BG.BackgroundColor3 = Color3.new(0.098, 0.098, 0.098)
-            BG.BorderColor3 = Color3.new(0.058,0.058,0.058)
-            BG.BorderSizePixel = 2
-            BG.Position = UDim2.new(0.15,0,0.82,0)
-            BG.Size = UDim2.new(0,210,0,127)
-            BG.Active = true
-            BG.Draggable = true
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
-            Title.Name = "Title"
-            Title.Parent = BG
-            Title.BackgroundColor3 = Color3.new(0.267,0.0039,0.627)
-            Title.BorderColor3 = Color3.new(0.18,0,0.431)
-            Title.BorderSizePixel = 2
-            Title.Size = UDim2.new(0,210,0,33)
-            Title.Font = Enum.Font.Highway
-            Title.Text = "Noclip"
-            Title.TextColor3 = Color3.new(1,1,1)
-            Title.TextSize = 30
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
 
-            Toggle.Parent = BG
-            Toggle.BackgroundColor3 = Color3.new(0.267,0.0039,0.627)
-            Toggle.BorderColor3 = Color3.new(0.18,0,0.431)
-            Toggle.BorderSizePixel = 2
-            Toggle.Position = UDim2.new(0.15,0,0.37,0)
-            Toggle.Size = UDim2.new(0,146,0,36)
-            Toggle.Font = Enum.Font.Highway
-            Toggle.Text = "Toggle"
-            Toggle.TextColor3 = Color3.new(1,1,1)
-            Toggle.TextSize = 25
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
 
-            StatusPF.Name = "StatusPF"
-            StatusPF.Parent = BG
-            StatusPF.BackgroundTransparency = 1
-            StatusPF.Position = UDim2.new(0.31,0,0.7,0)
-            StatusPF.Size = UDim2.new(0,56,0,20)
-            StatusPF.Font = Enum.Font.Highway
-            StatusPF.Text = "Status:"
-            StatusPF.TextColor3 = Color3.new(1,1,1)
-            StatusPF.TextSize = 20
-
-            Status.Name = "Status"
-            Status.Parent = BG
-            Status.BackgroundTransparency = 1
-            Status.Position = UDim2.new(0.58,0,0.7,0)
-            Status.Size = UDim2.new(0,56,0,20)
-            Status.Font = Enum.Font.Highway
-            Status.Text = "off"
-            Status.TextColor3 = Color3.new(0.666,0,0)
-            Status.TextSize = 14
-
-            local Stepped
-            Toggle.MouseButton1Click:Connect(function()
-                if Status.Text == "off" then
-                    Clipon = true
-                    Status.Text = "on"
-                    Status.TextColor3 = Color3.new(0,185/255,0)
-                    Stepped = game:GetService("RunService").Stepped:Connect(function()
-                        if Clipon then
-                            for _, part in pairs(Plr.Character:GetChildren()) do
-                                if part:IsA("BasePart") then
-                                    part.CanCollide = false
-                                end
-                            end
-                        else
-                            if Stepped then Stepped:Disconnect() end
-                        end
-                    end)
-                else
-                    Clipon = false
-                    Status.Text = "off"
-                    Status.TextColor3 = Color3.new(170/255,0,0)
-                end
-            end)
-            print("Noclip pressed")
-        end
-    },
-    {Name = "WalkSpeed", Callback = function() print("WalkSpeed pressed") end},
-    {Name = "Tracers/ESP", Callback = function() print("Tracers/ESP pressed") end},
-    {Name = "InfiniteJump", Callback = function() print("InfiniteJump pressed") end},
-    {Name = "Fly", Callback = function() print("Fly pressed") end},
-    {Name = "SpeedBoost", Callback = function() print("SpeedBoost pressed") end},
-    {Name = "JumpBoost", Callback = function() print("JumpBoost pressed") end},
-}
-
--- Creează toate butoanele
-for _, btn in ipairs(characterButtons) do
-    CharacterTab:CreateButton({
-        Name = btn.Name,
-        Callback = btn.Callback
-    })
-end
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+local Tab = Window:CreateTab("Autos", 4483362458) -- Title, Image
