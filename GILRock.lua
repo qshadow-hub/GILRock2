@@ -40,7 +40,7 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Autos",nil) -- Title, Image
 local MainSection = MainTab:CreateSection("Autos")
 
-local Dropdown = Tab:CreateDropdown({
+local Dropdown = MainTab:CreateDropdown({
    Name = "Dropdown Example",
    Options = {"Option 1","Option 2"},
    CurrentOption = {"Option 1"},
