@@ -27,8 +27,17 @@ local Window = Rayfield:CreateWindow({
         RememberJoins = true
     },
 
-    -- KEY SYSTEM DISABLED
-    KeySystem = false
+    -- KEY SYSTEM ENABLED WITH LOCAL KEYS
+    KeySystem = true,
+    KeySettings = {
+        Title = "GILRock Key",
+        Subtitle = "Key System",
+        Note = "Ask the owner for a key",
+        FileName = "Key",
+        SaveKey = true,
+        GrabKeyFromSite = false, -- no website
+        Key = {"Hello23", "Key123", "VIPKEY"} -- list of valid keys
+    }
 })
 
 ----------------------------------------------------------------
@@ -44,7 +53,6 @@ AutosTab:CreateDropdown({
     MultipleOptions = false,
     Flag = "Dropdown1",
     Callback = function(Options)
-        -- Dropdown logic
         print("Selected:", Options[1])
     end,
 })
