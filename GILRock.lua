@@ -57,7 +57,7 @@ local Toggle1 = AutosTab:CreateToggle({
 })
 
 local Toggle2 = AutosTab:CreateToggle({
-   Name = "",
+   Name = "BEST ORES",
    CurrentValue = false,
    Flag = "Toggle2",
    Callback = function(Value)
@@ -66,7 +66,7 @@ local Toggle2 = AutosTab:CreateToggle({
 })
 
 local Toggle3 = AutosTab:CreateToggle({
-   Name = "Temp3",
+   Name = "Pickaxe",
    CurrentValue = false,
    Flag = "Toggle3",
    Callback = function(Value)
@@ -91,7 +91,7 @@ local Slider = AutosTab:CreateSlider({
    Name = "WalkSpeed",
    Range = {0, 1000},
    Increment = 10,
-   Suffix = "Bananas",
+   Suffix = "WalkSpeed",
    CurrentValue = 10,
    Flag = "Slider1", -- Unique flag for configuration
    Callback = function(Value)
@@ -104,7 +104,7 @@ local Slider = AutosTab:CreateSlider({
    Name = "JumpPower",
    Range = {0, 1000},
    Increment = 10,
-   Suffix = "Bananas",
+   Suffix = "JumpPower",
    CurrentValue = 10,
    Flag = "Slider1", -- Unique flag for configuration
    Callback = function(Value)
@@ -112,28 +112,55 @@ local Slider = AutosTab:CreateSlider({
    end,
 })
 
-
-local CharToggle3 = CharacterTab:CreateToggle({
-   Name = "Tracers",
-   CurrentValue = false,
-   Flag = "CharToggle3",
-   Callback = function(Value)
-       print("Character Temp3:", Value)
-   end,
-})
-
 -- ========== ESP TAB ==========
 local ESPTab = Window:CreateTab("ESP", nil)
 local ESPSection = ESPTab:CreateSection("ESP")
 
-local ESPToggle1 = ESPTab:CreateToggle({
-   Name = "Players",
-   CurrentValue = false,
-   Flag = "ESPToggle1",
-   Callback = function(Value)
-       print("ESP Temp1:", Value)
-   end,
+local Players = game:GetService("Players")
+
+-- Table to store player names
+local playerNames = {}
+
+-- Function to refresh the dropdown options
+local function refreshDropdown()
+    playerNames = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(playerNames, player.Name)
+    end
+    Dropdown1:UpdateOptions(playerNames) -- Updates the dropdown with current players
+end
+
+-- Create the dropdown
+local Dropdown1 = AutosTab:CreateDropdown({
+    Name = "Players",
+    Options = {},  -- Start empty; we'll populate it dynamically
+    CurrentOption = "Select Player",
+    MultipleOptions = false,
+    Flag = "Dropdown1",
+    Callback = function(option)
+        print("Selected player:", option)
+    end,
 })
+
+-- Initial population
+refreshDropdown()
+
+-- Update dropdown when a player joins
+Players.PlayerAdded:Connect(function(player)
+    table.insert(playerNames, player.Name)
+    Dropdown1:UpdateOptions(playerNames)
+end)
+
+-- Update dropdown when a player leaves
+Players.PlayerRemoving:Connect(function(player)
+    for i, name in ipairs(playerNames) do
+        if name == player.Name then
+            table.remove(playerNames, i)
+            break
+        end
+    end
+    Dropdown1:UpdateOptions(playerNames)
+end)
 
 local ESPToggle2 = ESPTab:CreateToggle({
    Name = "Ores",
