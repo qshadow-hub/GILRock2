@@ -37,9 +37,9 @@ local AutosTab = Window:CreateTab("Autos", nil)
 local AutosSection = AutosTab:CreateSection("Autos")
 
 local Dropdown1 = AutosTab:CreateDropdown({
-   Name = "Dropdown Example",
-   Options = {"Option 1","Option 2"},
-   CurrentOption = "Option 1",
+   Name = "Mine",
+   Options = {"Stone","Basalt","LimeStone"},
+   CurrentOption = "Stone",
    MultipleOptions = false,
    Flag = "Dropdown1",
    Callback = function(Option)
@@ -48,7 +48,7 @@ local Dropdown1 = AutosTab:CreateDropdown({
 })
 
 local Toggle1 = AutosTab:CreateToggle({
-   Name = "Temp1",
+   Name = "Money",
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
@@ -57,7 +57,7 @@ local Toggle1 = AutosTab:CreateToggle({
 })
 
 local Toggle2 = AutosTab:CreateToggle({
-   Name = "Temp2",
+   Name = "",
    CurrentValue = false,
    Flag = "Toggle2",
    Callback = function(Value)
@@ -79,7 +79,7 @@ local CharacterTab = Window:CreateTab("Character", nil)
 local CharacterSection = CharacterTab:CreateSection("Character")
 
 local CharToggle1 = CharacterTab:CreateToggle({
-   Name = "Temp1",
+   Name = "Noclip",
    CurrentValue = false,
    Flag = "CharToggle1",
    Callback = function(Value)
@@ -87,17 +87,34 @@ local CharToggle1 = CharacterTab:CreateToggle({
    end,
 })
 
-local CharToggle2 = CharacterTab:CreateToggle({
-   Name = "Temp2",
-   CurrentValue = false,
-   Flag = "CharToggle2",
+local Slider = AutosTab:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {0, 1000},
+   Increment = 10,
+   Suffix = "Bananas",
+   CurrentValue = 10,
+   Flag = "Slider1", -- Unique flag for configuration
    Callback = function(Value)
-       print("Character Temp2:", Value)
+       print("Slider value:", Value)
    end,
 })
 
+
+local Slider = AutosTab:CreateSlider({
+   Name = "JumpPower",
+   Range = {0, 1000},
+   Increment = 10,
+   Suffix = "Bananas",
+   CurrentValue = 10,
+   Flag = "Slider1", -- Unique flag for configuration
+   Callback = function(Value)
+       print("Slider value:", Value)
+   end,
+})
+
+
 local CharToggle3 = CharacterTab:CreateToggle({
-   Name = "Temp3",
+   Name = "Tracers",
    CurrentValue = false,
    Flag = "CharToggle3",
    Callback = function(Value)
@@ -110,7 +127,7 @@ local ESPTab = Window:CreateTab("ESP", nil)
 local ESPSection = ESPTab:CreateSection("ESP")
 
 local ESPToggle1 = ESPTab:CreateToggle({
-   Name = "Temp1",
+   Name = "Players",
    CurrentValue = false,
    Flag = "ESPToggle1",
    Callback = function(Value)
@@ -119,7 +136,7 @@ local ESPToggle1 = ESPTab:CreateToggle({
 })
 
 local ESPToggle2 = ESPTab:CreateToggle({
-   Name = "Temp2",
+   Name = "Ores",
    CurrentValue = false,
    Flag = "ESPToggle2",
    Callback = function(Value)
@@ -128,7 +145,7 @@ local ESPToggle2 = ESPTab:CreateToggle({
 })
 
 local ESPToggle3 = ESPTab:CreateToggle({
-   Name = "Temp3",
+   Name = "Npc",
    CurrentValue = false,
    Flag = "ESPToggle3",
    Callback = function(Value)
@@ -141,7 +158,7 @@ local TeleportTab = Window:CreateTab("Teleport", nil)
 local TeleportSection = TeleportTab:CreateSection("Teleport")
 
 local TeleToggle1 = TeleportTab:CreateToggle({
-   Name = "Temp1",
+   Name = "Players",
    CurrentValue = false,
    Flag = "TeleToggle1",
    Callback = function(Value)
@@ -150,7 +167,7 @@ local TeleToggle1 = TeleportTab:CreateToggle({
 })
 
 local TeleToggle2 = TeleportTab:CreateToggle({
-   Name = "Temp2",
+   Name = "Ores",
    CurrentValue = false,
    Flag = "TeleToggle2",
    Callback = function(Value)
@@ -159,7 +176,7 @@ local TeleToggle2 = TeleportTab:CreateToggle({
 })
 
 local TeleToggle3 = TeleportTab:CreateToggle({
-   Name = "Temp3",
+   Name = "Npc",
    CurrentValue = false,
    Flag = "TeleToggle3",
    Callback = function(Value)
