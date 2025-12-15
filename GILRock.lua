@@ -46,3 +46,55 @@ local Button = MainTab:CreateButton({
    -- The function that takes place when the button is pressed
    end,
 })
+local Button = MainTab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = MainTab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = MainTab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = MainTab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = MainTab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Tab = Window:CreateTab("Character",nil) -- Title, Image
+local Section = Tab:CreateSection("Character")
+
+local Button = Tab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "Temp",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
