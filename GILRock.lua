@@ -116,14 +116,90 @@ local Slider = AutosTab:CreateSlider({
 local ESPTab = Window:CreateTab("ESP", nil)
 local ESPSection = ESPTab:CreateSection("ESP")
 
-local ESPToggle2 = ESPTab:CreateToggle({
-   Name = "Player",
-   CurrentValue = false,
-   Flag = "ESPToggle2",
-   Callback = function(Value)
-       print("ESP Temp2:", Value)
-   end,
-})
+-- Place this in a LocalScript inside your dropdown button/GUI element
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Reference to your GUI elements (adjust paths as needed)
+local dropdownButton = script.Parent -- The button that opens the dropdown
+local dropdownFrame = dropdownButton.Parent:WaitForChild("DropdownFrame") -- Container for player list
+local playerListFrame = dropdownFrame:WaitForChild("PlayerList") -- ScrollingFrame or Frame for buttons
+
+local selectedPlayer = nil
+local isDropdownOpen = false
+
+-- Function to update the player list
+local function updatePlayerList()
+	-- Clear existing buttons
+	for _, child in pairs(playerListFrame:GetChildren()) do
+		if child:IsA("TextButton") then
+			child:Destroy()
+		end
+	end
+	
+	-- Create a button for each player
+	local yOffset = 0
+	for _, plr in pairs(Players:GetPlayers()) do
+		local playerButton = Instance.new("TextButton")
+		playerButton.Name = plr.Name
+		playerButton.Size = UDim2.new(1, 0, 0, 30)
+		playerButton.Position = UDim2.new(0, 0, 0, yOffset)
+		playerButton.Text = plr.Name
+		playerButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		playerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		playerButton.Font = Enum.Font.SourceSans
+		playerButton.TextSize = 18
+		playerButton.Parent = playerListFrame
+		
+		-- When a player is clicked
+		playerButton.MouseButton1Click:Connect(function()
+			selectedPlayer = plr
+			dropdownButton.Text = plr.Name -- Update dropdown button text
+			dropdownFrame.Visible = false
+			isDropdownOpen = false
+			print("Selected player:", plr.Name)
+			
+			-- You can fire a RemoteEvent here to send selection to server
+			-- game.ReplicatedStorage.PlayerSelected:FireServer(plr)
+		end)
+		
+		yOffset = yOffset + 35
+	end
+	
+	-- Update the scrolling frame canvas size
+	if playerListFrame:IsA("ScrollingFrame") then
+		playerListFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+	end
+end
+
+-- Toggle dropdown visibility
+dropdownButton.MouseButton1Click:Connect(function()
+	isDropdownOpen = not isDropdownOpen
+	dropdownFrame.Visible = isDropdownOpen
+	
+	if isDropdownOpen then
+		updatePlayerList()
+	end
+end)
+
+-- Update list when players join or leave
+Players.PlayerAdded:Connect(function()
+	if isDropdownOpen then
+		updatePlayerList()
+	end
+end)
+
+Players.PlayerRemoving:Connect(function()
+	if isDropdownOpen then
+		updatePlayerList()
+	end
+end)
+
+-- Initial setup
+dropdownFrame.Visible = false
+updatePlayerList()
 
 local ESPToggle2 = ESPTab:CreateToggle({
    Name = "Ores",
