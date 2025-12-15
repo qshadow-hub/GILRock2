@@ -58,7 +58,7 @@ local Window = Rayfield:CreateWindow({
         Note = "Get a key from the website",
         FileName = "Key",
         SaveKey = false,
-        GrabKeyFromSite = false, -- We'll validate manually below
+        GrabKeyFromSite = true, -- We'll validate manually below
         Key = {"TEMP"} -- dummy key
     }
 })
