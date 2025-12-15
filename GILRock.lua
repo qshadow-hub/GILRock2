@@ -87,26 +87,25 @@ local CharToggle1 = CharacterTab:CreateToggle({
    end,
 })
 
-local Slider = AutosTab:CreateSlider({
+local Slider1 = CharacterTab:CreateSlider({
    Name = "WalkSpeed",
    Range = {0, 1000},
    Increment = 10,
    Suffix = "WalkSpeed",
    CurrentValue = 10,
-   Flag = "Slider1", -- Unique flag for configuration
+   Flag = "Slider1",
    Callback = function(Value)
        print("Slider value:", Value)
    end,
 })
 
-
-local Slider = AutosTab:CreateSlider({
+local Slider2 = CharacterTab:CreateSlider({
    Name = "JumpPower",
    Range = {0, 1000},
    Increment = 10,
    Suffix = "JumpPower",
    CurrentValue = 10,
-   Flag = "Slider1", -- Unique flag for configuration
+   Flag = "Slider2",
    Callback = function(Value)
        print("Slider value:", Value)
    end,
@@ -116,93 +115,40 @@ local Slider = AutosTab:CreateSlider({
 local ESPTab = Window:CreateTab("ESP", nil)
 local ESPSection = ESPTab:CreateSection("ESP")
 
--- Place this in a LocalScript inside your dropdown button/GUI element
-
+-- Player Dropdown for ESP
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- Reference to your GUI elements (adjust paths as needed)
-local dropdownButton = script.Parent -- The button that opens the dropdown
-local dropdownFrame = dropdownButton.Parent:WaitForChild("DropdownFrame") -- Container for player list
-local playerListFrame = dropdownFrame:WaitForChild("PlayerList") -- ScrollingFrame or Frame for buttons
-
 local selectedPlayer = nil
-local isDropdownOpen = false
 
--- Function to update the player list
-local function updatePlayerList()
-	-- Clear existing buttons
-	for _, child in pairs(playerListFrame:GetChildren()) do
-		if child:IsA("TextButton") then
-			child:Destroy()
-		end
-	end
-	
-	-- Create a button for each player
-	local yOffset = 0
-	for _, plr in pairs(Players:GetPlayers()) do
-		local playerButton = Instance.new("TextButton")
-		playerButton.Name = plr.Name
-		playerButton.Size = UDim2.new(1, 0, 0, 30)
-		playerButton.Position = UDim2.new(0, 0, 0, yOffset)
-		playerButton.Text = plr.Name
-		playerButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-		playerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-		playerButton.Font = Enum.Font.SourceSans
-		playerButton.TextSize = 18
-		playerButton.Parent = playerListFrame
-		
-		-- When a player is clicked
-		playerButton.MouseButton1Click:Connect(function()
-			selectedPlayer = plr
-			dropdownButton.Text = plr.Name -- Update dropdown button text
-			dropdownFrame.Visible = false
-			isDropdownOpen = false
-			print("Selected player:", plr.Name)
-			
-			-- You can fire a RemoteEvent here to send selection to server
-			-- game.ReplicatedStorage.PlayerSelected:FireServer(plr)
-		end)
-		
-		yOffset = yOffset + 35
-	end
-	
-	-- Update the scrolling frame canvas size
-	if playerListFrame:IsA("ScrollingFrame") then
-		playerListFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
-	end
+local function getPlayerNames()
+    local names = {}
+    for _, plr in pairs(Players:GetPlayers()) do
+        table.insert(names, plr.Name)
+    end
+    return names
 end
 
--- Toggle dropdown visibility
-dropdownButton.MouseButton1Click:Connect(function()
-	isDropdownOpen = not isDropdownOpen
-	dropdownFrame.Visible = isDropdownOpen
-	
-	if isDropdownOpen then
-		updatePlayerList()
-	end
-end)
+local PlayerDropdown = ESPTab:CreateDropdown({
+   Name = "Select Player",
+   Options = getPlayerNames(),
+   CurrentOption = "None",
+   MultipleOptions = false,
+   Flag = "PlayerDropdown",
+   Callback = function(Option)
+       selectedPlayer = Players:FindFirstChild(Option)
+       if selectedPlayer then
+           print("Selected player:", selectedPlayer.Name)
+       end
+   end,
+})
 
--- Update list when players join or leave
+-- Update dropdown when players join or leave
 Players.PlayerAdded:Connect(function()
-	if isDropdownOpen then
-		updatePlayerList()
-	end
+    PlayerDropdown:Refresh(getPlayerNames())
 end)
 
 Players.PlayerRemoving:Connect(function()
-	if isDropdownOpen then
-		updatePlayerList()
-	end
+    PlayerDropdown:Refresh(getPlayerNames())
 end)
-
--- Initial setup
-dropdownFrame.Visible = false
-updatePlayerList()
-
-local TeleportTab = Window:CreateTab("ESP", nil)
-local TeleportSection = TeleportTab:CreateSection("ESP")
 
 local ESPToggle2 = ESPTab:CreateToggle({
    Name = "Ores",
