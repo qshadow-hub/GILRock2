@@ -1,53 +1,112 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+-- Load Rayfield
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
+-- Create Window
 local Window = Rayfield:CreateWindow({
-   Name = "GILRock",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "GILRock",
-   LoadingSubtitle = "qShadow",
-   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+    Name = "GILRock",
+    Icon = 0,
+    LoadingTitle = "GILRock",
+    LoadingSubtitle = "qShadow",
+    ShowText = "Rayfield",
+    Theme = "Default",
 
-   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+    ToggleUIKeybind = "K",
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false,
 
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Big Hub"
-   },
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = nil,
+        FileName = "Big Hub"
+    },
 
-   Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-   },
+    Discord = {
+        Enabled = false,
+        Invite = "noinvitelink",
+        RememberJoins = true
+    },
 
-   KeySystem = true, -- Set this to true to use our key system
-   KeySettings = {
-      Title = "GILRock Key",
-      Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-   }
+    -- KEY SYSTEM DISABLED
+    KeySystem = false
 })
 
-local MainTab = Window:CreateTab("Autos",nil) -- Title, Image
-local MainSection = MainTab:CreateSection("Autos")
+----------------------------------------------------------------
+-- AUTOS TAB
+----------------------------------------------------------------
+local AutosTab = Window:CreateTab("Autos", nil)
+AutosTab:CreateSection("Autos")
 
-local Dropdown = MainTab:CreateDropdown({
-   Name = "Dropdown Example",
-   Options = {"Option 1","Option 2"},
-   CurrentOption = {"Option 1"},
-   MultipleOptions = false,
-   Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Options)
-   -- The function that takes place when the selected option is changed
-   -- The variable (Options) is a table of strings for the current selected options
-   end,
+AutosTab:CreateDropdown({
+    Name = "Dropdown Example",
+    Options = {"Option 1", "Option 2"},
+    CurrentOption = {"Option 1"},
+    MultipleOptions = false,
+    Flag = "Dropdown1",
+    Callback = function(Options)
+        -- Dropdown logic
+        print("Selected:", Options[1])
+    end,
+})
+
+AutosTab:CreateButton({
+    Name = "Temp Button 1",
+    Callback = function()
+        print("Temp Button 1 pressed")
+    end,
+})
+
+AutosTab:CreateButton({
+    Name = "Temp Button 2",
+    Callback = function()
+        print("Temp Button 2 pressed")
+    end,
+})
+
+AutosTab:CreateButton({
+    Name = "Temp Button 3",
+    Callback = function()
+        print("Temp Button 3 pressed")
+    end,
+})
+
+AutosTab:CreateButton({
+    Name = "Temp Button 4",
+    Callback = function()
+        print("Temp Button 4 pressed")
+    end,
+})
+
+AutosTab:CreateButton({
+    Name = "Temp Button 5",
+    Callback = function()
+        print("Temp Button 5 pressed")
+    end,
+})
+
+----------------------------------------------------------------
+-- CHARACTER TAB
+----------------------------------------------------------------
+local CharacterTab = Window:CreateTab("Character", nil)
+CharacterTab:CreateSection("Character")
+
+CharacterTab:CreateButton({
+    Name = "Character Temp 1",
+    Callback = function()
+        print("Character Temp 1 pressed")
+    end,
+})
+
+CharacterTab:CreateButton({
+    Name = "Character Temp 2",
+    Callback = function()
+        print("Character Temp 2 pressed")
+    end,
+})
+
+CharacterTab:CreateButton({
+    Name = "Character Temp 3",
+    Callback = function()
+        print("Character Temp 3 pressed")
+    end,
 })
