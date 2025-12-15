@@ -201,6 +201,9 @@ end)
 dropdownFrame.Visible = false
 updatePlayerList()
 
+local TeleportTab = Window:CreateTab("ESP", nil)
+local TeleportSection = TeleportTab:CreateSection("ESP")
+
 local ESPToggle2 = ESPTab:CreateToggle({
    Name = "Ores",
    CurrentValue = false,
