@@ -37,5 +37,17 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
-local MainTab = Window:CreateTab("Autos", 4483362458) -- Title, Image
+local MainTab = Window:CreateTab("Autos",nil) -- Title, Image
 local MainSection = MainTab:CreateSection("Autos")
+
+local Dropdown = Tab:CreateDropdown({
+   Name = "Mine",
+   Options = {"Iron","Coal","Tin"},
+   CurrentOption = {"Iron"},
+   MultipleOptions = true,
+   Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Options)
+   -- The function that takes place when the selected option is changed
+   -- The variable (Options) is a table of strings for the current selected options
+   end,
+})
