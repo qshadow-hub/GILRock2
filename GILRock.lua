@@ -1291,7 +1291,7 @@ ScriptsTab:CreateButton({
 ScriptsTab:CreateButton({
     Name = "🔫 Arsenal Script",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/thaibao/main/TbaoHubArsenal"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/enes14451445-dev/roblox-scripts/main/astra-hub.lua"))()
         Rayfield:Notify({Title = "Script Loaded", Content = "Arsenal script loaded", Duration = 2})
     end
 })
