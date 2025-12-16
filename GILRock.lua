@@ -329,25 +329,16 @@ local function stopESP()
 end
 
 -- FULLBRIGHT
-local function enableFullbright()
-    fullbrightEnabled = true
-    Lighting.Brightness = 2
-    Lighting.ClockTime = 14
-    Lighting.FogEnd = 100000
-    Lighting.GlobalShadows = false
-    Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+ local Light = game:GetService("Lighting")
+function dofullbright()
+Light.Ambient = Color3.new(1, 1, 1)
+Light.ColorShift_Bottom = Color3.new(1, 1, 1)
+Light.ColorShift_Top = Color3.new(1, 1, 1)
 end
-
-local function disableFullbright()
-    fullbrightEnabled = false
-    Lighting.Brightness = 1
-    Lighting.ClockTime = 12
-    Lighting.FogEnd = 100000
-    Lighting.GlobalShadows = true
-    Lighting.OutdoorAmbient = Color3.fromRGB(70, 70, 70)
-end
-
+dofullbright()
+Light.LightingChanged:Connect(dofullbright)
 -- TRACERS (Following Mouse Cursor)
+
 local function createTracerForPlayer(plr)
     if plr == player then return end
     
