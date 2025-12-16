@@ -1305,18 +1305,10 @@ ScriptsTab:CreateButton({
 })
 
 ScriptsTab:CreateButton({
-    Name = "🏃 Da Hood Script",
+    Name = "⚔️ Counter Blox",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/SpaceYes/Lua/Main/DaHood.Lua"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Da Hood script loaded", Duration = 2})
-    end
-})
-
-ScriptsTab:CreateButton({
-    Name = "🎨 FE Animation GUI",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/Animation-Hub/main/Animation%20Gui"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Animation GUI loaded", Duration = 2})
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Counter-Blox-NEVERWIN-70603"))()
+        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
     end
 })
 
