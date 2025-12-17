@@ -4795,861 +4795,158 @@ MiscFeaturesTab:CreateButton({
         spawn(function()
             for i = 1, 100 do
                 Lighting.Ambient = Color3.fromHSV(math.random(), 1, 1)
-                for
-   -- ============================================
--- TAB 25: ANTI-CHEAT BYPASS
--- ============================================
-local AntiCheatTab = Window:CreateTab("🛡️ Anti-Cheat", nil)
-AntiCheatTab:CreateSection("Anti-Cheat Bypass")
-
-AntiCheatTab:CreateButton({
-    Name = "🔒 Anti-Kick",
-    Callback = function()
-        pcall(function()
-            local mt = getrawmetatable(game)
-            local oldNamecall = mt.__namecall
-            setreadonly(mt, false)
-            
-            mt.__namecall = newcclosure(function(self, ...)
-                local method = getnamecallmethod()
-                if method == "Kick" then
-                    return
-                end
-                return oldNamecall(self, ...)
-            end)
-            
-            setreadonly(mt, true)
-            Rayfield:Notify({Title = "Anti-Kick Active", Content = "You cannot be kicked!", Duration = 2})
-        end)
-    end
-})
-
-AntiCheatTab:CreateButton({
-    Name = "🚫 Anti-Ban",
-    Callback = function()
-        pcall(function()
-            local BanService = game:GetService("BanService")
-            BanService.Ban = function() return nil end
-            Rayfield:Notify({Title = "Anti-Ban Active", Content = "Ban protection enabled!", Duration = 2})
-        end)
-    end
-})
-
-AntiCheatTab:CreateToggle({
-    Name = "👻 Anti-Spectate",
-    CurrentValue = false,
-    Callback = function(val)
-        if val then
-            spawn(function()
-                while val do
-                    pcall(function()
-                        for _, plr in pairs(Players:GetPlayers()) do
-                            if plr ~= player and plr.Character then
-                                local humanoid = plr.Character:FindFirstChild("Humanoid")
-                                if humanoid and humanoid.Health <= 0 then
-                                    -- Prevent spectating
-                                end
+                _, plr in pairs(Players:GetPlayers()) do
+                    if plr.Character then
+                        for _, part in pairs(plr.Character:GetDescendants()) do
+                            if part:IsA("BasePart") then
+                                part.BrickColor = BrickColor.Random()
                             end
                         end
-                    end)
-                    wait(0.5)
+                    end
                 end
-            end)
-            Rayfield:Notify({Title = "Anti-Spectate ON", Content = "Others can't watch you!", Duration = 2})
-        end
-    end
-})
-
-AntiCheatTab:CreateButton({
-    Name = "🔐 Spoof User ID",
-    Callback = function()
-        pcall(function()
-            local fakeID = math.random(1000000, 9999999)
-            Rayfield:Notify({Title = "User ID Spoofed", Content = "New ID: "..fakeID, Duration = 3})
-        end)
-    end
-})
-
-AntiCheatTab:CreateButton({
-    Name = "📡 Disable Remote Logging",
-    Callback = function()
-        pcall(function()
-            for _, remote in pairs(game:GetDescendants()) do
-                if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") then
-                    remote.OnClientEvent:Connect(function() end)
-                end
-            end
-            Rayfield:Notify({Title = "Remote Logging Disabled", Content = "Server can't track your actions!", Duration = 2})
-        end)
-    end
-})
-
-AntiCheatTab:CreateButton({
-    Name = "🎭 Fake Ping",
-    Callback = function()
-        local fakePing = math.random(1, 50)
-        Rayfield:Notify({Title = "Ping Spoofed", Content = "Showing "..fakePing.."ms ping", Duration = 2})
-    end
-})
-
--- ============================================
--- TAB 26: VEHICLE
--- ============================================
-local VehicleTab = Window:CreateTab("🚗 Vehicle", nil)
-VehicleTab:CreateSection("Vehicle Controls")
-
-VehicleTab:CreateToggle({
-    Name = "🚀 Vehicle Speed Boost",
-    CurrentValue = false,
-    Callback = function(val)
-        if val then
-            spawn(function()
-                while val do
-                    pcall(function()
-                        local char = getChar()
-                        if char then
-                            local vehicle = char.Parent
-                            if vehicle and vehicle:FindFirstChild("VehicleSeat") then
-                                vehicle.VehicleSeat.MaxSpeed = 200
-                            end
-                        end
-                    end)
-                    wait(0.1)
-                end
-            end)
-            Rayfield:Notify({Title = "Vehicle Speed Boost ON", Content = "Maximum speed!", Duration = 2})
-        end
-    end
-})
-
-VehicleTab:CreateToggle({
-    Name = "🎮 Vehicle Fly",
-    CurrentValue = false,
-    Callback = function(val)
-        if val then
-            spawn(function()
-                while val do
-                    pcall(function()
-                        local char = getChar()
-                        if char and char:FindFirstChild("Humanoid") then
-                            if char.Humanoid.SeatPart then
-                                local seat = char.Humanoid.SeatPart
-                                local vehicle = seat.Parent
-                                
-                                if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-                                    vehicle.AssemblyLinearVelocity = Vector3.new(
-                                        vehicle.AssemblyLinearVelocity.X,
-                                        50,
-                                        vehicle.AssemblyLinearVelocity.Z
-                                    )
-                                end
-                            end
-                        end
-                    end)
-                    wait()
-                end
-            end)
-            Rayfield:Notify({Title = "Vehicle Fly ON", Content = "Press Space to fly!", Duration = 2})
-        end
-    end
-})
-
-VehicleTab:CreateButton({
-    Name = "🚁 Spawn Car",
-    Callback = function()
-        pcall(function()
-            local car = Instance.new("Model")
-            car.Name = "CustomCar"
-            
-            local body = Instance.new("Part")
-            body.Size = Vector3.new(6, 2, 12)
-            body.BrickColor = BrickColor.Random()
-            body.Parent = car
-            
-            local seat = Instance.new("VehicleSeat")
-            seat.Size = Vector3.new(2, 1, 2)
-            seat.Position = body.Position + Vector3.new(0, 1.5, 0)
-            seat.Parent = car
-            
-            local root = getRoot()
-            if root then
-                car:MoveTo(root.Position + Vector3.new(10, 5, 0))
-                car.Parent = workspace
-                Rayfield:Notify({Title = "Car Spawned", Content = "Vehicle created!", Duration = 2})
-            end
-        end)
-    end
-})
-
-VehicleTab:CreateButton({
-    Name = "✈️ Spawn Plane",
-    Callback = function()
-        pcall(function()
-            local plane = Instance.new("Model")
-            plane.Name = "CustomPlane"
-            
-            local body = Instance.new("Part")
-            body.Size = Vector3.new(8, 3, 15)
-            body.BrickColor = BrickColor.new("White")
-            body.Parent = plane
-            
-            local wing1 = Instance.new("Part")
-            wing1.Size = Vector3.new(20, 1, 5)
-            wing1.Position = body.Position
-            wing1.Parent = plane
-            
-            local seat = Instance.new("VehicleSeat")
-            seat.Position = body.Position + Vector3.new(0, 2, 0)
-            seat.Parent = plane
-            
-            local root = getRoot()
-            if root then
-                plane:MoveTo(root.Position + Vector3.new(15, 10, 0))
-                plane.Parent = workspace
-                Rayfield:Notify({Title = "Plane Spawned", Content = "Aircraft ready!", Duration = 2})
-            end
-        end)
-    end
-})
-
-VehicleTab:CreateButton({
-    Name = "🛥️ Spawn Boat",
-    Callback = function()
-        pcall(function()
-            local boat = Instance.new("Model")
-            boat.Name = "CustomBoat"
-            
-            local hull = Instance.new("Part")
-            hull.Size = Vector3.new(10, 3, 15)
-            hull.BrickColor = BrickColor.new("Brown")
-            hull.Material = Enum.Material.Wood
-            hull.Parent = boat
-            
-            local seat = Instance.new("VehicleSeat")
-            seat.Position = hull.Position + Vector3.new(0, 2, 0)
-            seat.Parent = boat
-            
-            local root = getRoot()
-            if root then
-                boat:MoveTo(root.Position + Vector3.new(20, 0, 0))
-                boat.Parent = workspace
-                Rayfield:Notify({Title = "Boat Spawned", Content = "Set sail!", Duration = 2})
-            end
-        end)
-    end
-})
-
-VehicleTab:CreateToggle({
-    Name = "🎯 Auto Drive",
-    CurrentValue = false,
-    Callback = function(val)
-        if val then
-            spawn(function()
-                while val do
-                    pcall(function()
-                        local char = getChar()
-                        if char and char.Humanoid.SeatPart then
-                            local seat = char.Humanoid.SeatPart
-                            seat.ThrottleFloat = 1
-                        end
-                    end)
-                    wait(0.1)
-                end
-            end)
-            Rayfield:Notify({Title = "Auto Drive ON", Content = "Vehicle drives automatically!", Duration = 2})
-        end
-    end
-})
-
--- ============================================
--- TAB 27: WORLD
--- ============================================
-local WorldTab = Window:CreateTab("🌍 World", nil)
-WorldTab:CreateSection("World Manipulation")
-
-WorldTab:CreateButton({
-    Name = "🌅 Change Time to Morning",
-    Callback = function()
-        Lighting.ClockTime = 8
-        Rayfield:Notify({Title = "Time Changed", Content = "Good morning!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🌆 Change Time to Noon",
-    Callback = function()
-        Lighting.ClockTime = 12
-        Rayfield:Notify({Title = "Time Changed", Content = "High noon!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🌃 Change Time to Night",
-    Callback = function()
-        Lighting.ClockTime = 0
-        Rayfield:Notify({Title = "Time Changed", Content = "Good night!", Duration = 2})
-    end
-})
-
-WorldTab:CreateSlider({
-    Name = "⏰ Custom Time",
-    Range = {0, 24},
-    Increment = 1,
-    CurrentValue = 12,
-    Callback = function(val)
-        Lighting.ClockTime = val
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "☀️ Always Day",
-    Callback = function()
-        spawn(function()
-            for i = 1, 1000 do
-                Lighting.ClockTime = 12
-                wait(1)
-            end
-        end)
-        Rayfield:Notify({Title = "Always Day", Content = "Time locked to day!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🌙 Always Night",
-    Callback = function()
-        spawn(function()
-            for i = 1, 1000 do
-                Lighting.ClockTime = 0
-                wait(1)
-            end
-        end)
-        Rayfield:Notify({Title = "Always Night", Content = "Time locked to night!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🌈 Rainbow Sky",
-    Callback = function()
-        spawn(function()
-            for i = 1, 100 do
-                Lighting.Ambient = Color3.fromHSV(i / 100, 1, 1)
-                Lighting.OutdoorAmbient = Color3.fromHSV(i / 100, 1, 1)
                 wait(0.1)
             end
         end)
-        Rayfield:Notify({Title = "Rainbow Sky", Content = "Colorful world!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🔥 Apocalypse Mode",
-    Callback = function()
-        Lighting.Ambient = Color3.fromRGB(255, 0, 0)
-        Lighting.OutdoorAmbient = Color3.fromRGB(100, 0, 0)
-        Lighting.FogColor = Color3.fromRGB(50, 0, 0)
-        Lighting.FogEnd = 500
-        Rayfield:Notify({Title = "Apocalypse Mode", Content = "End of the world!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "❄️ Winter Mode",
-    Callback = function()
-        Lighting.Ambient = Color3.fromRGB(150, 200, 255)
-        Lighting.OutdoorAmbient = Color3.fromRGB(200, 220, 255)
-        Lighting.FogColor = Color3.fromRGB(200, 200, 255)
-        Rayfield:Notify({Title = "Winter Mode", Content = "Let it snow!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🌊 Underwater Effect",
-    Callback = function()
-        Lighting.Ambient = Color3.fromRGB(0, 100, 200)
-        Lighting.OutdoorAmbient = Color3.fromRGB(0, 50, 150)
-        Lighting.FogColor = Color3.fromRGB(0, 50, 100)
-        Lighting.FogEnd = 200
-        Rayfield:Notify({Title = "Underwater", Content = "Deep sea vibes!", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🎃 Spooky Mode",
-    Callback = function()
-        Lighting.Ambient = Color3.fromRGB(100, 0, 100)
-        Lighting.OutdoorAmbient = Color3.fromRGB(50, 0, 50)
-        Lighting.ClockTime = 0
-        Rayfield:Notify({Title = "Spooky Mode", Content = "Boo! 👻", Duration = 2})
-    end
-})
-
-WorldTab:CreateButton({
-    Name = "🌟 Space Mode",
-    Callback = function()
-        Lighting.Ambient = Color3.fromRGB(0, 0, 0)
-        Lighting.OutdoorAmbient = Color3.fromRGB(0, 0, 50)
-        Lighting.Brightness = 0
-        Rayfield:Notify({Title = "Space Mode", Content = "Among the stars!", Duration = 2})
-    end
-})
-
--- ============================================
--- TAB 28: AUDIO
--- ============================================
-local AudioTab = Window:CreateTab("🎵 Audio", nil)
-AudioTab:CreateSection("Audio Controls")
-
-AudioTab:CreateInput({
-    Name = "🎵 Play Sound ID",
-    PlaceholderText = "Enter Sound ID",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(text)
-        pcall(function()
-            local sound = Instance.new("Sound")
-            sound.SoundId = "rbxassetid://"..text
-            sound.Volume = 1
-            sound.Parent = workspace
-            sound:Play()
-            Rayfield:Notify({Title = "Sound Playing", Content = "ID: "..text, Duration = 2})
-        end)
-    end
-})
-
-AudioTab:CreateSlider({
-    Name = "🔊 Master Volume",
-    Range = {0, 10},
-    Increment = 0.5,
-    CurrentValue = 5,
-    Callback = function(val)
-        pcall(function()
-            for _, sound in pairs(workspace:GetDescendants()) do
-                if sound:IsA("Sound") then
-                    sound.Volume = val / 10
-                end
-            end
-        end)
-    end
-})
-
-AudioTab:CreateButton({
-    Name = "🎶 Play Random Music",
-    Callback = function()
-        local musicIDs = {
-            "1839246711", -- Default Roblox music
-            "142376088",
-            "130768299",
-            "155313239"
-        }
-        local randomID = musicIDs[math.random(1, #musicIDs)]
-        
-        pcall(function()
-            local sound = Instance.new("Sound")
-            sound.SoundId = "rbxassetid://"..randomID
-            sound.Volume = 0.5
-            sound.Looped = true
-            sound.Parent = workspace
-            sound:Play()
-            Rayfield:Notify({Title = "Music Playing", Content = "Random track!", Duration = 2})
-        end)
-    end
-})
-
-AudioTab:CreateButton({
-    Name = "🔇 Mute All Sounds",
-    Callback = function()
-        pcall(function()
-            for _, sound in pairs(workspace:GetDescendants()) do
-                if sound:IsA("Sound") then
-                    sound.Volume = 0
-                end
-            end
-            Rayfield:Notify({Title = "Sounds Muted", Content = "All audio silenced!", Duration = 2})
-        end)
-    end
-})
-
-AudioTab:CreateButton({
-    Name = "🔊 Unmute All Sounds",
-    Callback = function()
-        pcall(function()
-            for _, sound in pairs(workspace:GetDescendants()) do
-                if sound:IsA("Sound") then
-                    sound.Volume = 0.5
-                end
-            end
-            Rayfield:Notify({Title = "Sounds Unmuted", Content = "Audio restored!", Duration = 2})
-        end)
-    end
-})
-
-AudioTab:CreateButton({
-    Name = "⏸️ Pause All Sounds",
-    Callback = function()
-        pcall(function()
-            for _, sound in pairs(workspace:GetDescendants()) do
-                if sound:IsA("Sound") and sound.Playing then
-                    sound:Pause()
-                end
-            end
-            Rayfield:Notify({Title = "Sounds Paused", Content = "All audio paused!", Duration = 2})
-        end)
-    end
-})
-
-AudioTab:CreateButton({
-    Name = "▶️ Resume All Sounds",
-    Callback = function()
-        pcall(function()
-            for _, sound in pairs(workspace:GetDescendants()) do
-                if sound:IsA("Sound") then
-                    sound:Resume()
-                end
-            end
-            Rayfield:Notify({Title = "Sounds Resumed", Content = "Audio playing again!", Duration = 2})
-        end)
-    end
-})
-
-AudioTab:CreateButton({
-    Name = "💿 Earrape Mode",
-    Callback = function()
-        pcall(function()
-            for _, sound in pairs(workspace:GetDescendants()) do
-                if sound:IsA("Sound") then
-                    sound.Volume = 10
-                    sound.PlaybackSpeed = 2
-                end
-            end
-            Rayfield:Notify({Title = "EARRAPE MODE", Content = "RIP EARS 💀", Duration = 2})
-        end)
-    end
-})
-
--- ============================================
--- TAB 29: PETS
--- ============================================
-local PetsTab = Window:CreateTab("🐾 Pets", nil)
-PetsTab:CreateSection("Pet System")
-
-local petFollowing = false
-local currentPet = nil
-
-PetsTab:CreateButton({
-    Name = "🐕 Spawn Dog Pet",
-    Callback = function()
-        pcall(function()
-            if currentPet then currentPet:Destroy() end
-            
-            local pet = Instance.new("Part")
-            pet.Size = Vector3.new(2, 2, 3)
-            pet.Shape = Enum.PartType.Block
-            pet.BrickColor = BrickColor.new("Brown")
-            pet.Material = Enum.Material.SmoothPlastic
-            pet.Name = "DogPet"
-            pet.Parent = workspace
-            
-            local head = Instance.new("Part")
-            head.Size = Vector3.new(1.5, 1.5, 1.5)
-            head.Shape = Enum.PartType.Ball
-            head.BrickColor = BrickColor.new("Brown")
-            head.Parent = pet
-            
-            local weld = Instance.new("Weld")
-            weld.Part0 = pet
-            weld.Part1 = head
-            weld.C0 = CFrame.new(0, 1.5, -1)
-            weld.Parent = pet
-            
-            currentPet = pet
-            petFollowing = true
-            
-            spawn(function()
-                while petFollowing and currentPet and currentPet.Parent do
-                    local root = getRoot()
-                    if root then
-                        currentPet.CFrame = root.CFrame * CFrame.new(3, -2, -3)
-                    end
-                    wait(0.1)
-                end
-            end)
-            
-            Rayfield:Notify({Title = "Dog Pet Spawned", Content = "Your loyal companion!", Duration = 2})
-        end)
-    end
-})
-
-PetsTab:CreateButton({
-    Name = "🐱 Spawn Cat Pet",
-    Callback = function()
-        pcall(function()
-            if currentPet then currentPet:Destroy() end
-            
-            local pet = Instance.new("Part")
-            pet.Size = Vector3.new(1.5, 1.5, 2)
-            pet.BrickColor = BrickColor.new("Orange")
-            pet.Material = Enum.Material.SmoothPlastic
-            pet.Name = "CatPet"
-            pet.Parent = workspace
-            
-            currentPet = pet
-            petFollowing = true
-            
-            spawn(function()
-                while petFollowing and currentPet and currentPet.Parent do
-                    local root = getRoot()
-                    if root then
-                        currentPet.CFrame = root.CFrame * CFrame.new(-3, -2, -3)
-                    end
-                    wait(0.1)
-                end
-            end)
-            
-            Rayfield:Notify({Title = "Cat Pet Spawned", Content = "Meow! 🐱", Duration = 2})
-        end)
-    end
-})
-
-PetsTab:CreateButton({
-    Name = "🐉 Spawn Dragon Pet",
-    Callback = function()
-        pcall(function()
-            if currentPet then currentPet:Destroy() end
-            
-            local pet = Instance.new("Part")
-            pet.Size = Vector3.new(3, 3, 5)
-            pet.BrickColor = BrickColor.new("Really red")
-            pet.Material = Enum.Material.Neon
-            pet.Name = "DragonPet"
-            pet.Parent = workspace
-            
-            local fire = Instance.new("Fire")
-            fire.Size = 5
-            fire.Parent = pet
-            
-            currentPet = pet
-            petFollowing = true
-            
-            spawn(function()
-                while petFollowing and currentPet and currentPet.Parent do
-                    local root = getRoot()
-                    if root then
-                        currentPet.CFrame = root.CFrame * CFrame.new(0, 5, -5)
-                    end
-                    wait(0.1)
-                end
-            end)
-            
-            Rayfield:Notify({Title = "Dragon Pet Spawned", Content = "Epic dragon! 🐉", Duration = 2})
-        end)
-    end
-})
-
-PetsTab:CreateButton({
-    Name = "👻 Spawn Ghost Pet",
-    Callback = function()
-        pcall(function()
-            if currentPet then currentPet:Destroy() end
-            
-            local pet = Instance.new("Part")
-            pet.Size = Vector3.new(2, 3, 2)
-            pet.Shape = Enum.PartType.Ball
-            pet.BrickColor = BrickColor.new("White")
-            pet.Material = Enum.Material.ForceField
-            pet.Transparency = 0.5
-            pet.Name = "GhostPet"
-            pet.Parent = workspace
-            
-            currentPet = pet
-            petFollowing = true
-            
-            spawn(function()
-                while petFollowing and currentPet and currentPet.Parent do
-                    local root = getRoot()
-                    if root then
-                        local bobbing = math.sin(tick() * 2) * 2
-                        currentPet.CFrame = root.CFrame * CFrame.new(4, bobbing, -4)
-                    end
-                    wait(0.1)
-                end
-            end)
-            
-            Rayfield:Notify({Title = "Ghost Pet Spawned", Content = "Spooky friend! 👻", Duration = 2})
-        end)
-    end
-})
-
-PetsTab:CreateButton({
-    Name = "🌟 Spawn Fairy Pet",
-    Callback = function()
-        pcall(function()
-            if currentPet then currentPet:Destroy() end
-            
-            local pet = Instance.new("Part")
-            pet.Size = Vector3.new(1, 1, 1)
-            pet.Shape = Enum.PartType.Ball
-            pet.BrickColor = BrickColor.new("Pink")
-            pet.Material = Enum.Material.Neon
-            pet.Name = "FairyPet"
-            pet.Parent = workspace
-            
-            local sparkles = Instance.new("Sparkles")
-            sparkles.Parent = pet
-            
-            currentPet = pet
-            petFollowing = true
-            
-            spawn(function()
-                while petFollowing and currentPet and currentPet.Parent do
-                    local root = getRoot()
-                    if root then
-                        local circling = math.sin(tick() * 3) * 4
-                        currentPet.CFrame = root.CFrame * CFrame.new(circling, 3, -3)
-                    end
-                    wait(0.05)
-                end
-            end)
-            
-            Rayfield:Notify({Title = "Fairy Pet Spawned", Content = "Magical companion! ✨", Duration = 2})
-        end)
-    end
-})
-
-PetsTab:CreateButton({
-    Name = "🗑️ Remove Pet",
-    Callback = function()
-        if currentPet then
-            currentPet:Destroy()
-            petFollowing = false
-            currentPet = nil
-            Rayfield:Notify({Title = "Pet Removed", Content = "Goodbye friend!", Duration = 2})
-        end
-    end
-})
-
-PetsTab:CreateToggle({
-    Name = "🎯 Pet Follow",
-    CurrentValue = true,
-    Callback = function(val)
-        petFollowing = val
-        Rayfield:Notify({Title = val and "Pet Following" or "Pet Stopped", Content = val and "Pet will follow you!" or "Pet stays in place", Duration = 2})
-    end
-})
-
--- ============================================
--- TAB 30: MISC FEATURES
--- ============================================
-local MiscFeaturesTab = Window:CreateTab("🎁 Extras", nil)
-MiscFeaturesTab:CreateSection("Extra Features")
-
-MiscFeaturesTab:CreateButton({
-    Name = "🎲 Spin Wheel",
-    Callback = function()
-        local rewards = {"1000 Coins", "Speed Boost", "Jump Boost", "Nothing", "Jackpot!"}
-        local randomReward = rewards[math.random(1, #rewards)]
-        wait(1)
-        Rayfield:Notify({Title = "Spin Result", Content = "You won: "..randomReward, Duration = 3})
+        Rayfield:Notify({Title = "PARTY MODE!", Content = "Let's celebrate! 🎉", Duration = 2})
     end
 })
 
 MiscFeaturesTab:CreateButton({
-    Name = "🎰 Slot Machine",
+    Name = "🌠 Shooting Stars",
     Callback = function()
-        local symbols = {"🍒", "🍋", "🍊", "⭐", "💎"}
-        local slot1 = symbols[math.random(1, #symbols)]
-        local slot2 = symbols[math.random(1, #symbols)]
-        local slot3 = symbols[math.random(1, #symbols)]
-        
-        wait(0.5)
-        Rayfield:Notify({Title = "Slot Machine", Content = slot1.." "..slot2.." "..slot3, Duration = 3})
-        
-        if slot1 == slot2 and slot2 == slot3 then
-            Rayfield:Notify({Title = "JACKPOT!", Content = "You won big! 💰", Duration = 3})
-        end
-    end
-})
-
-MiscFeaturesTab:CreateButton({
-    Name = "🎯 Target Practice",
-    Callback = function()
-        pcall(function()
-            for i = 1, 10 do
-                local target = Instance.new("Part")
-                target.Size = Vector3.new(3, 3, 1)
-                target.BrickColor = BrickColor.Random()
-                target.Material = Enum.Material.Neon
-                target.Position = Vector3.new(
-                    math.random(-50, 50),
-                    math.random(10, 30),
-                    math.random(-50, 50)
-                )
-                target.Anchored = true
-                target.Parent = workspace
+        spawn(function()
+            for i = 1, 20 do
+                local star = Instance.new("Part")
+                star.Size = Vector3.new(2, 2, 2)
+                star.Shape = Enum.PartType.Ball
+                star.Material = Enum.Material.Neon
+                star.BrickColor = BrickColor.new("White")
+                star.Position = Vector3.new(math.random(-100, 100), 200, math.random(-100, 100))
+                star.Parent = workspace
                 
-                target.Touched:Connect(function()
-                    target:Destroy()
-                    Rayfield:Notify({Title = "Hit!", Content = "Target destroyed!", Duration = 1})
-                end)
+                local trail = Instance.new("Trail")
+                local att0 = Instance.new("Attachment", star)
+                local att1 = Instance.new("Attachment", star)
+                att1.Position = Vector3.new(0, -2, 0)
+                trail.Attachment0 = att0
+                trail.Attachment1 = att1
+                trail.Color = ColorSequence.new(Color3.fromRGB(255, 255, 0))
+                trail.Lifetime = 2
+                trail.Parent = star
                 
-                game:GetService("Debris"):AddItem(target, 10)
+                local bv = Instance.new("BodyVelocity")
+                bv.Velocity = Vector3.new(math.random(-50, 50), -100, math.random(-50, 50))
+                bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                bv.Parent = star
+                
+                game:GetService("Debris"):AddItem(star, 5)
+                wait(0.3)
             end
-            Rayfield:Notify({Title = "Target Practice", Content = "10 targets spawned!", Duration = 2})
         end)
+        Rayfield:Notify({Title = "Shooting Stars", Content = "Make a wish! ⭐", Duration = 2})
     end
 })
 
 MiscFeaturesTab:CreateButton({
-    Name = "🎪 Spawn Obby",
+    Name = "🎮 Spawn Game Console",
     Callback = function()
         pcall(function()
             local root = getRoot()
             if root then
-                for i = 1, 20 do
-                    local platform = Instance.new("Part")
-                    platform.Size = Vector3.new(10, 1, 10)
-                    platform.Position = root.Position + Vector3.new(i * 12, math.random(0, 5), 0)
-                    platform.Anchored = true
-                    platform.BrickColor = BrickColor.Random()
-                    platform.Material = Enum.Material.Neon
-                    platform.Parent = workspace
-                end
-                Rayfield:Notify({Title = "Obby Created", Content = "Parkour time!", Duration = 2})
+                local console = Instance.new("Part")
+                console.Size = Vector3.new(5, 3, 0.5)
+                console.Position = root.Position + Vector3.new(0, 0, -5)
+                console.Anchored = true
+                console.BrickColor = BrickColor.new("Really black")
+                console.Material = Enum.Material.Glass
+                console.Parent = workspace
+                
+                local screen = Instance.new("SurfaceGui")
+                screen.Parent = console
+                
+                local text = Instance.new("TextLabel")
+                text.Size = UDim2.new(1, 0, 1, 0)
+                text.BackgroundTransparency = 0.5
+                text.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                text.Text = "GAME CONSOLE\n\nPRESS BUTTONS\nTO PLAY!"
+                text.TextSize = 30
+                text.Font = Enum.Font.Code
+                text.TextColor3 = Color3.fromRGB(0, 0, 0)
+                text.Parent = screen
+                
+                Rayfield:Notify({Title = "Game Console", Content = "Console spawned!", Duration = 2})
             end
         end)
     end
 })
 
 MiscFeaturesTab:CreateButton({
-    Name = "🎨 Paint Ball",
+    Name = "🏆 Trophy Room",
     Callback = function()
         pcall(function()
-            local mouse = player:GetMouse()
-            mouse.Button1Down:Connect(function()
-                local ball = Instance.new("Part")
-                ball.Size = Vector3.new(1, 1, 1)
-                ball.Shape = Enum.PartType.Ball
-                ball.BrickColor = BrickColor.Random()
-                ball.Material = Enum.Material.Neon
-                ball.Position = mouse.Hit.Position + Vector3.new(0, 10, 0)
-                ball.Parent = workspace
-                
-                ball.Touched:Connect(function(hit)
-                    if hit:IsA("BasePart") then
-                        hit.BrickColor = ball.BrickColor
-                        ball:Destroy()
-                    end
-                end)
-                
-                game:GetService("Debris"):AddItem(ball, 5)
-            end)
-            Rayfield:Notify({Title = "Paint Ball", Content = "Click to shoot paint!", Duration = 2})
+            local root = getRoot()
+            if root then
+                for i = 1, 5 do
+                    local trophy = Instance.new("Part")
+                    trophy.Size = Vector3.new(2, 3, 2)
+                    trophy.BrickColor = BrickColor.new("Gold")
+                    trophy.Material = Enum.Material.Neon
+                    trophy.Position = root.Position + Vector3.new(i * 3 - 9, 0, -10)
+                    trophy.Anchored = true
+                    trophy.Parent = workspace
+                    
+                    local sparkles = Instance.new("Sparkles")
+                    sparkles.SparkleColor = Color3.fromRGB(255, 215, 0)
+                    sparkles.Parent = trophy
+                end
+                Rayfield:Notify({Title = "Trophy Room", Content = "Your achievements!", Duration = 2})
+            end
         end)
     end
 })
 
 MiscFeaturesTab:CreateButton({
-    Name = "🎊 Party Mode",
+    Name = "🎭 Theater Mode",
     Callback = function()
-        spawn(function()
-            for i = 1, 100 do
-                Lighting.Ambient = Color3.fromHSV(math.random(), 1, 1)
-                for
+        pcall(function()
+            local root = getRoot()
+            if root then
+                local screen = Instance.new("Part")
+                screen.Size = Vector3.new(30, 20, 1)
+                screen.Position = root.Position + Vector3.new(0, 10, -30)
+                screen.Anchored = true
+                screen.BrickColor = BrickColor.new("Really black")
+                screen.Material = Enum.Material.SmoothPlastic
+                screen.Parent = workspace
+                
+                for row = 1, 5 do
+                    for seat = 1, 10 do
+                        local chair = Instance.new("Seat")
+                        chair.Size = Vector3.new(2, 1, 2)
+                        chair.Position = root.Position + Vector3.new(seat * 3 - 15, -3, -10 - row * 3)
+                        chair.BrickColor = BrickColor.new("Really red")
+                        chair.Parent = workspace
+                    end
+                end
+                
+                Rayfield:Notify({Title = "Theater Created", Content = "Enjoy the show! 🍿", Duration = 2})
+            end
+        end)
+    end
+})
+
+-- Final notification
+Rayfield:Notify({
+    Title = "🎉 ULTIMATE SCRIPT LOADED!",
+    Content = "30 TABS | 300+ FEATURES | READY TO USE!",
+    Duration = 5,
+    Image = 4483362458
+})
+
+print("✅ Universal Script Premium v3.0 - FULLY LOADED!")
+print("📊 Total Tabs: 30")
+print("🚀 Total Features: 300+")
+print("💎 Status: COMPLETE")
+print("👑 Made by qShadow/Darius/Hynexx")
+print("🔥 THIS IS THE ULTIMATE ROBLOX SCRIPT!")
+ 
