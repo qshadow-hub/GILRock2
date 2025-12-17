@@ -134,7 +134,7 @@
         
         <div class="input-group">
             <label for="scriptName">Script Name:</label>
-            <input type="text" id="scriptName" placeholder="Enter your script name" value="MyScript">
+            <input type="text" id="Universal Script" placeholder="Universal Script" value="MyScript">
         </div>
 
         <button onclick="generateScript()">Generate Script</button>
@@ -151,10 +151,10 @@
 
     <script>
         function generateScript() {
-            const scriptName = document.getElementById('scriptName').value || 'MyScript';
+            const scriptName = document.getElementById('Universal Script').value || 'MyScript';
             
             const luaCode = `-- Configuration
-local SCRIPT_NAME = "${scriptName}"
+local SCRIPT_NAME = "${Universal Script}"
 
 -- Create ScreenGui
 local screenGui = Instance.new("ScreenGui")
