@@ -2083,12 +2083,24 @@ MiscTab:CreateButton({
     end
 })
 
--- AUTO-COPY DISCORD LINK ON SCRIPT EXECUTION
 spawn(function()
     wait(1)
-    local DISCORD_LINK = "https://discord.gg/5HEnRuJzsX"
+    local DISCORD_LINK = "https://discord.gg/UTCT2hck8S"
+
     if setclipboard then
         setclipboard(DISCORD_LINK)
-        Rayfield:Notify({Title = "📋 Discord Copied!", Content = "Link copied to clipboard!", Duration = 3})
+    elseif toclipboard then
+        toclipboard(DISCORD_LINK)
+    elseif Clipboard and Clipboard.set then
+        Clipboard.set(DISCORD_LINK)
+    end
+
+    if Rayfield then
+        Rayfield:Notify({
+            Title = "📋 Discord Copied!",
+            Content = "Invite-ul a fost copiat în clipboard!",
+            Duration = 3
+        })
     end
 end)
+
