@@ -1,124 +1,75 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/us3", true))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Command Bar loaded", Duration = 2})
-    end
+local Window = Rayfield:CreateWindow({
+   Name = "Universal Script",
+   Icon = 0,
+   LoadingTitle = "Universal Script",
+   LoadingSubtitle = "by qShadow/Darius/Hynexx",
+   ShowText = "Universal Script",
+   Theme = "Default",
+   ToggleUIKeybind = "K",
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+   ConfigurationSaving = {Enabled = true, FolderName = "UniversalScriptConfig", FileName = "Big Hub"},
+   Discord = {Enabled = false, Invite = "noinvitelink", RememberJoins = true},
+   KeySystem = true,
+   KeySettings = {
+      Title = "Universal Script",
+      Subtitle = "Key System",
+      Note = "Key=qShadow",
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"qShadow2"}
+   }
 })
 
-ScriptsTab:CreateButton({
-    Name = "🦉 Owl Hub",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Owl Hub loaded", Duration = 2})
-    end
-})
+-- Calea unde vom salva timpul rămas
+local savePath = "GILRockKeyTime.txt"
 
-ScriptsTab:CreateButton({
-    Name = "🎯 Aimbot Script",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-V3/main/main.lua"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Aimbot loaded", Duration = 2})
-    end
-})
+-- Durata cheii: 10 ani, 6 luni, 4 zile, 17 ore, 40 minute, 27 secunde
+local defaultTotalSeconds = 10*365*24*60*60 + 6*30*24*60*60 + 4*24*60*60 + 17*60*60 + 40*60 + 27
+local timeLeft = defaultTotalSeconds
+local keyActive = true
 
-ScriptsTab:CreateButton({
-    Name = "🔫 Arsenal Script",
-    Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Arsenal-Feather-Hub-AI-PLAY-SOFTAIM-GUNMODS-DRAWFOV-ESP-70554"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Arsenal script loaded", Duration = 2})
+-- Încarcă timpul rămas dacă fișierul există
+if isfile(savePath) then
+    local savedTime = tonumber(readfile(savePath))
+    if savedTime then
+        timeLeft = savedTime
     end
-})
+end
 
-ScriptsTab:CreateButton({
-    Name = "⚔️ Blox Fruits Script",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/DonateMe/main/ScriptLoader"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Blox Fruits script loaded", Duration = 2})
-    end
-})
+-- Funcție de salvare a timpului rămas
+local function saveTime()
+    writefile(savePath, tostring(timeLeft))
+end
 
-ScriptsTab:CreateButton({
-    Name = "🔨 The Forge",
-    Callback = function()
-        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2075c39b9a5a2e4414c59c93fe8a5f06.lua"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
-    end
-})
+-- Funcție de conversie a secundelor în ani, luni, zile, ore, minute, secunde
+local function formatTime(seconds)
+    local years = math.floor(seconds / (365*24*60*60))
+    seconds = seconds % (365*24*60*60)
+    local months = math.floor(seconds / (30*24*60*60))
+    seconds = seconds % (30*24*60*60)
+    local days = math.floor(seconds / (24*60*60))
+    seconds = seconds % (24*60*60)
+    local hours = math.floor(seconds / 3600)
+    seconds = seconds % 3600
+    local minutes = math.floor(seconds / 60)
+    local secs = seconds % 60
+    return years.."y "..months.."M "..days.."d "..hours.."h "..minutes.."m "..secs.."s"
+end
 
-ScriptsTab:CreateButton({
-    Name = "🔨 Blade Ball",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Akash1al/Blade-Ball-Updated-Script/refs/heads/main/Blade-Ball-Script"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
-    end
-})
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local player = Players.LocalPlayer
 
-ScriptsTab:CreateButton({
-    Name = "🔨 Fnaf CO-OP",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Asphronium/FnafCo-opGUI/main/fnafCo-opGUI.lua"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
-    end
-})
+-- Control Variables
+local noclip = false
+local flying = false
+local jumpEnabled = false
+local speedEnabled = false
 
-ScriptsTab:CreateButton({
-    Name = "🔨 Fnaf Enthernal",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Snipez-Dev/Rbx-Scripts/refs/heads/main/Eternal%20Nights"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
-    end
-})
-
-ScriptsTab:CreateButton({
-    Name = "🔨 The Forge",
-    Callback = function()
-        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2075c39b9a5a2e4414c59c93fe8a5f06.lua"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
-    end
-})
-
-ScriptsTab:CreateButton({
-    Name = "🔨 The Forge",
-    Callback = function()
-        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2075c39b9a5a2e4414c59c93fe8a5f06.lua"))()
-        Rayfield:Notify({Title = "Script Loaded", Content = "Counter Blox script loaded", Duration = 2})
-    end
-})
--- ============================================
--- TAB 6: ADMIN
--- ============================================
-local AdminTab = Window:CreateTab("👑 Admin", nil)
-AdminTab:CreateSection("Admin Commands")
-
-AdminTab:CreateButton({
-    Name = "👨‍💼 Load Admin Commands",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-        Rayfield:Notify({Title = "Admin Loaded", Content = "Infinite Yield admin loaded", Duration = 2})
-    end
-})
-
-AdminTab:CreateButton({
-    Name = "🔨 Load HD Admin",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/HD-Admin/main/Main"))()
-        Rayfield:Notify({Title = "Admin Loaded", Content = "HD Admin loaded", Duration = 2})
-    end
-})
-
-AdminTab:CreateButton({
-    Name = "⚡ Load Reviz Admin",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/ttjy9808/POOPOOPEE/main/protected_7831550836392278.lua.txt"))()
-        Rayfield:Notify({Title = "Admin Loaded", Content = "Reviz Admin loaded", Duration = 2})
-    end
-})
-
-AdminTab:CreateButton({
-    Name = "🎭 Fake Lag",
-    Callback = function()
-        pcall(function()
-            local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue()
-            Rayfield:Notify({Title = "Ping", Content = "Current ping: "..math.floor(ping).."ms", Duration = 3})
-        end)
-    end
-})
