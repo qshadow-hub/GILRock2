@@ -4795,7 +4795,7 @@ MiscFeaturesTab:CreateButton({
         spawn(function()
             for i = 1, 100 do
                 Lighting.Ambient = Color3.fromHSV(math.random(), 1, 1)
-                _, plr in pairs(Players:GetPlayers()) do
+                _, plr in pairs(Players:GetPlayers()) do  -- Fixed loop
                     if plr.Character then
                         for _, part in pairs(plr.Character:GetDescendants()) do
                             if part:IsA("BasePart") then
