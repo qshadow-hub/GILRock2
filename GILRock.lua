@@ -2103,3 +2103,609 @@ spawn(function()
     end
 end)
 
+-- ============================================
+-- TAB 12: ANIMATIONS
+-- ============================================
+local AnimationsTab = Window:CreateTab("💃 Animations", nil)
+AnimationsTab:CreateSection("Character Animations")
+
+local animations = {
+    ["Wave"] = "rbxassetid://507770239",
+    ["Dance"] = "rbxassetid://507771019",
+    ["Dance2"] = "rbxassetid://507776043",
+    ["Dance3"] = "rbxassetid://507777268",
+    ["Laugh"] = "rbxassetid://507770818",
+    ["Cheer"] = "rbxassetid://507770677",
+    ["Point"] = "rbxassetid://507770453",
+    ["Stadium"] = "rbxassetid://507781817",
+    ["Salute"] = "rbxassetid://3360689775"
+}
+
+for name, id in pairs(animations) do
+    AnimationsTab:CreateButton({
+        Name = "🎭 "..name,
+        Callback = function()
+            pcall(function()
+                local hum = getHumanoid()
+                if hum then
+                    local anim = Instance.new("Animation")
+                    anim.AnimationId = id
+                    local track = hum:LoadAnimation(anim)
+                    track:Play()
+                    Rayfield:Notify({Title = "Animation", Content = name.." played!", Duration = 2})
+                end
+            end)
+        end
+    })
+end
+
+AnimationsTab:CreateButton({
+    Name = "🛑 Stop All Animations",
+    Callback = function()
+        pcall(function()
+            local hum = getHumanoid()
+            if hum then
+                for _, track in pairs(hum:GetPlayingAnimationTracks()) do
+                    track:Stop()
+                end
+                Rayfield:Notify({Title = "Animations Stopped", Content = "All animations stopped", Duration = 2})
+            end
+        end)
+    end
+})
+
+AnimationsTab:CreateSection("Custom Animations")
+
+AnimationsTab:CreateInput({
+    Name = "Animation ID",
+    PlaceholderText = "Enter Animation ID",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(text)
+        _G.CustomAnimID = text
+    end
+})
+
+AnimationsTab:CreateButton({
+    Name = "▶️ Play Custom Animation",
+    Callback = function()
+        pcall(function()
+            if _G.CustomAnimID then
+                local hum = getHumanoid()
+                if hum then
+                    local anim = Instance.new("Animation")
+                    anim.AnimationId = "rbxassetid://".._G.CustomAnimID
+                    local track = hum:LoadAnimation(anim)
+                    track:Play()
+                    Rayfield:Notify({Title = "Custom Animation", Content = "Playing...", Duration = 2})
+                end
+            end
+        end)
+    end
+})
+
+-- ============================================
+-- TAB 13: EFFECTS
+-- ============================================
+local EffectsTab = Window:CreateTab("✨ Effects", nil)
+EffectsTab:CreateSection("Visual Effects")
+
+EffectsTab:CreateButton({
+    Name = "⚡ Lightning Aura",
+    Callback = function()
+        pcall(function()
+            local char = getChar()
+            if char then
+                for i = 1, 8 do
+                    local part = Instance.new("Part")
+                    part.Size = Vector3.new(0.2, 10, 0.2)
+                    part.Material = Enum.Material.Neon
+                    part.Anchored = true
+                    part.CanCollide = false
+                    part.BrickColor = BrickColor.new("Electric blue")
+                    part.Parent = char
+                    
+                    spawn(function()
+                        while part and part.Parent do
+                            local angle = (i / 8) * math.pi * 2 + tick()
+                            part.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(
+                                math.cos(angle) * 3,
+                                math.sin(tick() * 2) * 2,
+                                math.sin(angle) * 3
+                            )
+                            wait()
+                        end
+                    end)
+                end
+                Rayfield:Notify({Title = "Lightning Aura", Content = "Aura activated!", Duration = 2})
+            end
+        end)
+    end
+})
+
+EffectsTab:CreateButton({
+    Name = "🔥 Fire Aura",
+    Callback = function()
+        pcall(function()
+            local root = getRoot()
+            if root then
+                for i = 1, 5 do
+                    local fire = Instance.new("Fire")
+                    fire.Size = 8
+                    fire.Heat = 15
+                    fire.Color = Color3.fromRGB(255, math.random(0, 100), 0)
+                    fire.SecondaryColor = Color3.fromRGB(255, 255, 0)
+                    fire.Parent = root
+                end
+                Rayfield:Notify({Title = "Fire Aura", Content = "You're on fire!", Duration = 2})
+            end
+        end)
+    end
+})
+
+EffectsTab:CreateButton({
+    Name = "❄️ Ice Aura",
+    Callback = function()
+        pcall(function()
+            local char = getChar()
+            if char then
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Material = Enum.Material.Ice
+                        part.Color = Color3.fromRGB(150, 200, 255)
+                        
+                        local sparkle = Instance.new("Sparkles")
+                        sparkle.SparkleColor = Color3.fromRGB(150, 200, 255)
+                        sparkle.Parent = part
+                    end
+                end
+                Rayfield:Notify({Title = "Ice Aura", Content = "Frozen effect applied!", Duration = 2})
+            end
+        end)
+    end
+})
+
+EffectsTab:CreateButton({
+    Name = "🌟 Star Aura",
+    Callback = function()
+        pcall(function()
+            local root = getRoot()
+            if root then
+                spawn(function()
+                    for i = 1, 50 do
+                        local star = Instance.new("Part")
+                        star.Size = Vector3.new(0.5, 0.5, 0.5)
+                        star.Shape = Enum.PartType.Ball
+                        star.Material = Enum.Material.Neon
+                        star.BrickColor = BrickColor.Random()
+                        star.Anchored = true
+                        star.CanCollide = false
+                        star.Parent = workspace
+                        
+                        local pos = root.Position + Vector3.new(
+                            math.random(-10, 10),
+                            math.random(-10, 10),
+                            math.random(-10, 10)
+                        )
+                        star.Position = pos
+                        
+                        game:GetService("TweenService"):Create(star, TweenInfo.new(2), {
+                            Position = root.Position,
+                            Transparency = 1
+                        }):Play()
+                        
+                        game:GetService("Debris"):AddItem(star, 2)
+                        wait(0.05)
+                    end
+                end)
+                Rayfield:Notify({Title = "Star Aura", Content = "Stars surround you!", Duration = 2})
+            end
+        end)
+    end
+})
+
+EffectsTab:CreateButton({
+    Name = "🌈 Rainbow Particles",
+    Callback = function()
+        pcall(function()
+            local root = getRoot()
+            if root then
+                local particle = Instance.new("ParticleEmitter")
+                particle.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+                particle.Rate = 100
+                particle.Lifetime = NumberRange.new(2, 4)
+                particle.Speed = NumberRange.new(5, 10)
+                particle.SpreadAngle = Vector2.new(360, 360)
+                particle.Parent = root
+                
+                spawn(function()
+                    while particle and particle.Parent do
+                        particle.Color = ColorSequence.new(Color3.fromHSV(tick() % 5 / 5, 1, 1))
+                        wait(0.1)
+                    end
+                end)
+                
+                Rayfield:Notify({Title = "Rainbow Particles", Content = "Particles spawned!", Duration = 2})
+            end
+        end)
+    end
+})
+
+EffectsTab:CreateButton({
+    Name = "💫 Galaxy Effect",
+    Callback = function()
+        pcall(function()
+            local char = getChar()
+            if char then
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Material = Enum.Material.ForceField
+                        
+                        spawn(function()
+                            while part and part.Parent do
+                                part.Color = Color3.fromHSV((tick() + _) % 5 / 5, 0.8, 1)
+                                wait(0.05)
+                            end
+                        end)
+                    end
+                end
+                Rayfield:Notify({Title = "Galaxy Effect", Content = "Cosmic power!", Duration = 2})
+            end
+        end)
+    end
+})
+
+EffectsTab:CreateButton({
+    Name = "🧹 Remove All Effects",
+    Callback = function()
+        pcall(function()
+            local char = getChar()
+            if char then
+                for _, obj in pairs(char:GetDescendants()) do
+                    if obj:IsA("ParticleEmitter") or obj:IsA("Fire") or obj:IsA("Smoke") 
+                    or obj:IsA("Sparkles") or (obj:IsA("Part") and obj.Parent == char) then
+                        if obj:IsA("Part") and obj.Name ~= "HumanoidRootPart" and obj.Name ~= "Head" 
+                        and obj.Name ~= "Torso" and obj.Name ~= "Left Arm" and obj.Name ~= "Right Arm" 
+                        and obj.Name ~= "Left Leg" and obj.Name ~= "Right Leg" then
+                            obj:Destroy()
+                        end
+                    end
+                end
+                Rayfield:Notify({Title = "Effects Cleared", Content = "All effects removed!", Duration = 2})
+            end
+        end)
+    end
+})
+
+-- ============================================
+-- TAB 14: TOOLS
+-- ============================================
+local ToolsTab = Window:CreateTab("🔧 Tools", nil)
+ToolsTab:CreateSection("Utility Tools")
+
+ToolsTab:CreateButton({
+    Name = "🔦 Give Flashlight",
+    Callback = function()
+        pcall(function()
+            local tool = Instance.new("Tool")
+            tool.Name = "Flashlight"
+            tool.RequiresHandle = true
+            
+            local handle = Instance.new("Part")
+            handle.Name = "Handle"
+            handle.Size = Vector3.new(0.5, 2, 0.5)
+            handle.Parent = tool
+            
+            local light = Instance.new("SpotLight")
+            light.Brightness = 10
+            light.Range = 60
+            light.Parent = handle
+            
+            tool.Parent = player.Backpack
+            Rayfield:Notify({Title = "Flashlight", Content = "Flashlight added to inventory!", Duration = 2})
+        end)
+    end
+})
+
+ToolsTab:CreateButton({
+    Name = "⚔️ Give Sword",
+    Callback = function()
+        pcall(function()
+            local tool = game:GetObjects("rbxassetid://99119158")[1]
+            if tool then
+                tool.Parent = player.Backpack
+                Rayfield:Notify({Title = "Sword", Content = "Sword added to inventory!", Duration = 2})
+            end
+        end)
+    end
+})
+
+ToolsTab:CreateButton({
+    Name = "🎯 Give Grappling Hook",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Super-lover/scripts/main/grappling_hook"))()
+        Rayfield:Notify({Title = "Grappling Hook", Content = "Tool loaded!", Duration = 2})
+    end
+})
+
+ToolsTab:CreateButton({
+    Name = "🔫 Give Rocket Launcher",
+    Callback = function()
+        pcall(function()
+            local tool = game:GetObjects("rbxassetid://94794774")[1]
+            if tool then
+                tool.Parent = player.Backpack
+                Rayfield:Notify({Title = "Rocket Launcher", Content = "Weapon added!", Duration = 2})
+            end
+        end)
+    end
+})
+
+ToolsTab:CreateButton({
+    Name = "🎨 Give Paint Tool",
+    Callback = function()
+        pcall(function()
+            local tool = Instance.new("Tool")
+            tool.Name = "Paint Tool"
+            tool.RequiresHandle = true
+            
+            local handle = Instance.new("Part")
+            handle.Name = "Handle"
+            handle.Size = Vector3.new(0.3, 1, 0.3)
+            handle.BrickColor = BrickColor.Random()
+            handle.Parent = tool
+            
+            tool.Activated:Connect(function()
+                local mouse = player:GetMouse()
+                if mouse.Target then
+                    mouse.Target.BrickColor = BrickColor.Random()
+                end
+            end)
+            
+            tool.Parent = player.Backpack
+            Rayfield:Notify({Title = "Paint Tool", Content = "Click to paint objects!", Duration = 2})
+        end)
+    end
+})
+
+ToolsTab:CreateButton({
+    Name = "🧨 Give Bomb",
+    Callback = function()
+        pcall(function()
+            local tool = Instance.new("Tool")
+            tool.Name = "Bomb"
+            tool.RequiresHandle = true
+            
+            local handle = Instance.new("Part")
+            handle.Name = "Handle"
+            handle.Size = Vector3.new(1, 1, 1)
+            handle.Shape = Enum.PartType.Ball
+            handle.BrickColor = BrickColor.new("Really black")
+            handle.Parent = tool
+            
+            tool.Activated:Connect(function()
+                local bomb = handle:Clone()
+                bomb.Parent = workspace
+                bomb.Position = handle.Position
+                wait(3)
+                local explosion = Instance.new("Explosion")
+                explosion.Position = bomb.Position
+                explosion.BlastRadius = 30
+                explosion.Parent = workspace
+                bomb:Destroy()
+            end)
+            
+            tool.Parent = player.Backpack
+            Rayfield:Notify({Title = "Bomb", Content = "Explosive added!", Duration = 2})
+        end)
+    end
+})
+
+ToolsTab:CreateButton({
+    Name = "🗑️ Delete All Tools",
+    Callback = function()
+        pcall(function()
+            for _, tool in pairs(player.Backpack:GetChildren()) do
+                tool:Destroy()
+            end
+            local char = getChar()
+            if char then
+                for _, tool in pairs(char:GetChildren()) do
+                    if tool:IsA("Tool") then
+                        tool:Destroy()
+                    end
+                end
+            end
+            Rayfield:Notify({Title = "Tools Deleted", Content = "All tools removed!", Duration = 2})
+        end)
+    end
+})
+
+-- ============================================
+-- TAB 15: FUN
+-- ============================================
+local FunTab = Window:CreateTab("🎉 Fun", nil)
+FunTab:CreateSection("Fun Features")
+
+FunTab:CreateButton({
+    Name = "🎈 Balloon Effect",
+    Callback = function()
+        pcall(function()
+            local root = getRoot()
+            if root then
+                for i = 1, 10 do
+                    local balloon = Instance.new("Part")
+                    balloon.Size = Vector3.new(2, 2, 2)
+                    balloon.Shape = Enum.PartType.Ball
+                    balloon.Material = Enum.Material.SmoothPlastic
+                    balloon.BrickColor = BrickColor.Random()
+                    balloon.Position = root.Position + Vector3.new(math.random(-5, 5), 10, math.random(-5, 5))
+                    balloon.Parent = workspace
+                    
+                    local bv = Instance.new("BodyVelocity")
+                    bv.Velocity = Vector3.new(0, 5, 0)
+                    bv.MaxForce = Vector3.new(0, math.huge, 0)
+                    bv.Parent = balloon
+                    
+                    game:GetService("Debris"):AddItem(balloon, 10)
+                end
+                Rayfield:Notify({Title = "Balloons", Content = "Balloons released!", Duration = 2})
+            end
+        end)
+    end
+})
+
+FunTab:CreateButton({
+    Name = "🎆 Firework Show",
+    Callback = function()
+        pcall(function()
+            spawn(function()
+                for i = 1, 20 do
+                    local firework = Instance.new("Part")
+                    firework.Size = Vector3.new(1, 1, 1)
+                    firework.Position = Vector3.new(math.random(-50, 50), 100, math.random(-50, 50))
+                    firework.Anchored = true
+                    firework.CanCollide = false
+                    firework.Transparency = 1
+                    firework.Parent = workspace
+                    
+                    wait(0.5)
+                    
+                    for j = 1, 30 do
+                        local spark = Instance.new("Part")
+                        spark.Size = Vector3.new(0.5, 0.5, 0.5)
+                        spark.Material = Enum.Material.Neon
+                        spark.BrickColor = BrickColor.Random()
+                        spark.Position = firework.Position
+                        spark.Anchored = true
+                        spark.CanCollide = false
+                        spark.Parent = workspace
+                        
+                        game:GetService("TweenService"):Create(spark, TweenInfo.new(2), {
+                            Position = firework.Position + Vector3.new(
+                                math.random(-20, 20),
+                                math.random(-20, 20),
+                                math.random(-20, 20)
+                            ),
+                            Transparency = 1
+                        }):Play()
+                        
+                        game:GetService("Debris"):AddItem(spark, 2)
+                    end
+                    
+                    firework:Destroy()
+                    wait(0.5)
+                end
+            end)
+            Rayfield:Notify({Title = "Fireworks", Content = "Show started!", Duration = 2})
+        end)
+    end
+})
+
+FunTab:CreateButton({
+    Name = "🌪️ Spawn Tornado",
+    Callback = function()
+        pcall(function()
+            local root = getRoot()
+            if root then
+                spawn(function()
+                    for height = 0, 100, 2 do
+                        for angle = 0, 360, 30 do
+                            local part = Instance.new("Part")
+                            part.Size = Vector3.new(2, 2, 2)
+                            part.Material = Enum.Material.Neon
+                            part.Anchored = true
+                            part.CanCollide = false
+                            part.Color = Color3.fromHSV(height / 100, 1, 1)
+                            
+                            local rad = math.rad(angle)
+                            local distance = 5 + (height / 10)
+                            part.Position = root.Position + Vector3.new(
+                                math.cos(rad) * distance,
+                                height,
+                                math.sin(rad) * distance
+                            )
+                            part.Parent = workspace
+                            
+                            game:GetService("Debris"):AddItem(part, 5)
+                        end
+                        wait(0.05)
+                    end
+                end)
+                Rayfield:Notify({Title = "Tornado", Content = "Tornado spawned!", Duration = 2})
+            end
+        end)
+    end
+})
+
+FunTab:CreateButton({
+    Name = "🎪 Disco Floor",
+    Callback = function()
+        pcall(function()
+            local root = getRoot()
+            if root then
+                for x = -10, 10, 2 do
+                    for z = -10, 10, 2 do
+                        local tile = Instance.new("Part")
+                        tile.Size = Vector3.new(2, 0.5, 2)
+                        tile.Position = root.Position + Vector3.new(x, -3, z)
+                        tile.Anchored = true
+                        tile.Material = Enum.Material.Neon
+                        tile.Parent = workspace
+                        
+                        spawn(function()
+                            while tile and tile.Parent do
+                                tile.Color = Color3.fromHSV(math.random(), 1, 1)
+                                wait(0.3)
+                            end
+                        end)
+                        
+                        game:GetService("Debris"):AddItem(tile, 30)
+                    end
+                end
+                Rayfield:Notify({Title = "Disco Floor", Content = "Let's dance!", Duration = 2})
+            end
+        end)
+    end
+})
+
+FunTab:CreateToggle({
+    Name = "🎮 Head Follow Mouse",
+    CurrentValue = false,
+    Callback = function(val)
+        pcall(function()
+            if val then
+                spawn(function()
+                    while val do
+                        local char = getChar()
+                        local mouse = player:GetMouse()
+                        if char and char:FindFirstChild("Head") then
+                            char.Head.CFrame = CFrame.new(char.Head.Position, mouse.Hit.Position)
+                        end
+                        wait()
+                    end
+                end)
+                Rayfield:Notify({Title = "Head Tracking", Content = "Your head follows the mouse!", Duration = 2})
+            end
+        end)
+    end
+})
+
+FunTab:CreateButton({
+    Name = "🎲 Random Size",
+    Callback = function()
+        pcall(function()
+            local char = getChar()
+            if char then
+                local scale = math.random(5, 30) / 10
+                for _, obj in pairs(char:GetDescendants()) do
+                    if obj:IsA("BodyPartDescription") or obj:IsA("NumberValue") then
+                        if obj.Name:match("Scale") then
+                            obj.Value = scale
+                        end
+                    end
+                end
+                Rayfield:Notify({Title = "Random Size", Content = "Scale: "..scale, Duration = 2})
+            end
+        end)
+    end
+})
