@@ -486,7 +486,6 @@ InfoTab:CreateLabel("⚡ All systems operational")
 -- TAB 2: HOME
 -- ============================================
 local HomeTab = Window:CreateTab("🏠 Home", nil)
-HomeTab:CreateSection("🌏 Welcome to Universal Script")
 HomeTab:CreateSection("⚙️ Player Controls")
 
 -- NOCLIP
